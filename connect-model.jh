@@ -1,0 +1,102 @@
+entity User {
+	userId Long,
+    firstName String,
+    lastName String,
+    middleName String,
+    login String,
+    primaryEmail String,
+    primaryEmailVerified Boolean,
+    secondaryEmail String,
+    secondaryEmailVerified Boolean,
+    primaryPhone String,
+    primaryPhoneVerified Boolean,
+    secondaryPhone String,
+    secondaryPhoneVerified Boolean,
+    DOB Date,
+    address1 String,
+    address2 String,
+    cityOrDistrict String,
+    country String,
+    PIN Integer,
+    isGoodParty Boolean,
+    userStatus UserStatus,
+    gender Gender,
+    citizenship String,
+    maritalStatus MaritalStatus,
+    nationality String,
+    suffix String    
+}
+
+enum UserStatus {
+    ACTIVE, SUSPENDED, DELETED
+}
+
+enum Gender {
+    MALE, FEMALE, OTHERS
+}
+
+enum MaritalStatus {
+    Married, Single, Widowed, Separated, Divorced
+}
+
+entity UserPassword {
+	userId Long,
+    password String,
+    lastPassword String,
+    lastSecondPassword String,
+    lastThirdPassword String,
+    lastFourthPassword String,
+    lastFifthPassword String
+}
+relationship OneToOne {
+	User{userId} to UserPassword
+}
+
+entity Role {
+	roleId Long,
+	roleName String
+}
+
+entity UserRole {
+	userId Long,
+	roleId Long
+}
+
+relationship OneToMany {
+	User{userId} to UserRole
+}
+
+relationship OneToMany {
+	UserRole{roleId} to Role
+}
+
+entity Pages {
+	pageId Long,
+	pageName String
+}
+
+entity RolePages {
+	pageId Long,
+	roleId Long
+}
+relationship OneToMany {
+	RolePages{pageId} to Pages
+}
+relationship OneToMany {
+	Role{roleId} to RolePages
+}
+
+// Set pagination options
+paginate User with infinite-scroll
+paginate User with pagination
+
+// Use Data Transfert Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+
+// Set an angular suffix
+angularSuffix * with connect
+microservice
+search
